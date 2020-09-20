@@ -5,10 +5,10 @@ module.exports = class Command {
     this.client = client
 
     this.name = options.name
-    this.aliases = options.aliases || 'No aliases.'
-    this.description = options.description || 'No description.'
-    this.usage = options.usage || 'No usage.'
-    this.category = options.category || 'General'
+    this.aliases = options.aliases || []
+    this.description = options.description || 'Comando sem descrição.'
+    this.usage = options.usage || 'Comando sem modo de uso.'
+    this.category = options.category || 'Geral'
     this.devOnly = options.devOnly || false
     this.staffOnly = options.staffOnly || false
   }

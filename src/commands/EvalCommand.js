@@ -1,5 +1,5 @@
+/* eslint-disable no-eval */
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class EvalCommand extends Command {
   constructor (client) {
@@ -9,20 +9,23 @@ module.exports = class EvalCommand extends Command {
     })
   }
 
-  run ({ channel, guild, config }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
-    embed.setTitle(`<a:breace_animated:753454923231920242> BreaceLab (Nível: ${guild.premiumTier})`)
-    embed.setDescription([
-      `Quantidade atual de boosters no servidor \`${guild.premiumSubscriptionCount}\` <:boost:724566423220781097>`, '',
-      'Recompensas que você pode ganhar assim que der boost, se você der boost achando que esta livre das regras, esta completamente enganado.', '',
-      'Recompensas listadas abaixo:', '```html',
-      '<-> Enviar links e imagens em qualquer canal de conversa;', '',
-      '<-> Pode alterar ou colocar apelido;', '',
-      '<-> Em eventos, você poderá ter chance de ser um dos jurados;', '',
-      '<-> Poderá divulgar seu jogo, canal, live e etc, no canal #🗞┆divulgação', '',
-      '<-> Eventos especiais só para boosters;', '',
-      '<-> XP do bot @BreaceLab#5819 em dobro.', '```'
-    ])
-    channel.send(embed)
+  async run (ctx) {
+    var string = ctx.args.join(' ')
+    if (string.startsWith('`') && string.endsWith('`')) {
+      string = string.substr(3, string.length)
+      string = string.substr(0, string.length - 3)
+      string = string.substr(2, string.length)
+    }
+    try {
+      let evaled = await eval(string)
+      if (typeof evaled !== 'string') { evaled = require('util').inspect(evaled) }
+      ctx.channel.send(this.clean(evaled), { code: 'xl' })
+    } catch (err) {
+      ctx.channel.send(`\`ERROR\` \`\`\`xl\n${this.clean(err)}\n\`\`\``)
+    }
+  }
+
+  clean (text) {
+    return typeof (text) === 'string' ? text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) : text
   }
 }

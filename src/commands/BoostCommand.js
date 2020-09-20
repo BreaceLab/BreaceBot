@@ -12,7 +12,7 @@ module.exports = class BoostCommand extends Command {
   }
 
   run ({ channel, guild, config }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
+    const embed = new MessageEmbed().setColor(config.color)
     embed.setTitle(`<a:breace_animated:753454923231920242> BreaceLab (Nível: ${guild.premiumTier})`)
     embed.setDescription([
       `Quantidade atual de boosters no servidor \`${guild.premiumSubscriptionCount}\` <:boost:724566423220781097>`, '',
@@ -21,9 +21,9 @@ module.exports = class BoostCommand extends Command {
       '<-> Enviar links e imagens em qualquer canal de conversa;', '',
       '<-> Pode alterar ou colocar apelido;', '',
       '<-> Em eventos, você poderá ter chance de ser um dos jurados;', '',
-      '<-> Poderá divulgar seu jogo, canal, live e etc, no canal #🗞┆divulgação', '',
+      '<-> Poderá divulgar seu jogo, canal, live e etc, no canal #🗞┆divulgação;', '',
       '<-> Eventos especiais só para boosters;', '',
-      '<-> XP do bot @BreaceLab#5819 em dobro.', '```'
+      `<-> XP do bot @${this.client.user.tag} em dobro;`, '```'
     ])
     channel.send(embed)
   }

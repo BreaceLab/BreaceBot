@@ -8,24 +8,26 @@ Structures.extend('Message', (DiscordMessage) => {
     constructor (...opts) {
       super(...opts)
 
-      this.allowedChannels = this.client.config.botGuild.channels.commands
+      this.allowedChannels = this.client.config.channels.commands
 
       this.levelFeatures = {
         7: {
           reward: 'Aparecer na lista de ativos',
-          f: (rewards) => this.member.roles.add(rewards.active)
+          make: (rewards) => this.member.roles.add(rewards.active)
         },
         4: {
-          reward: 'Mudar de apelido',
-          f: (rewards) => this.member.roles.add(rewards.nickname)
+          reward: 'Enviar links',
+          make: (rewards) => this.member.roles.add(rewards.links)
         }
       }
+
+      this.suggest()
     }
 
     startsWithPrefix () {
       const { prefixes } = this.client.config
 
-      return prefixes.some(prefix => this.content.toLowerCase().startsWith(prefix.toLowerCase())) || this.content.toLowerCase().startsWith(this.guild.me.toString())
+      return prefixes.some(prefix => this.content.toLowerCase().startsWith(prefix.toLowerCase()))
     }
 
     getPrefixOfContent () {
@@ -38,12 +40,11 @@ Structures.extend('Message', (DiscordMessage) => {
     }
 
     async giveXp () {
-      const userData = await this.author.data()
-      const embed = new MessageEmbed().setColor(this.client.config.defaultColor)
+      const userData = await this.client.database.models.users.findById(this.author.id)
+      const embed = new MessageEmbed().setColor(this.client.config.color)
 
       if (!cooldowns.has(this.author.id)) {
-        if (this.member.premiumSince) userData.xp += 10
-        else userData.xp += 5
+        this.member.premiumSince ? userData.xp += 10 : userData.xp += 5
 
         if (userData.xp >= userData.level ** 5 + (100 * (userData.level * 2))) {
           userData.level++
@@ -52,19 +53,25 @@ Structures.extend('Message', (DiscordMessage) => {
           if (this.levelFeatures[userData.level]) {
             embed.setDescription([
               `Parabéns ${this.author}, você alcançou o nível **${userData.level}**!`,
-              `Benefícios desbloqueados: ${this.levelFeatures[userData.level].reward}`
+              `Benefícios desbloqueados: \`${this.levelFeatures[userData.level].reward}\``
             ])
 
-            this.levelFeatures[userData.level].f(this.client.config.rewards)
+            this.levelFeatures[userData.level].make(this.client.config.rewards)
             this.channel.send(embed)
           } else {
             embed.setDescription(`Parabéns ${this.author}, você alcançou o nível **${userData.level}**!`)
 
             this.channel.send(embed)
           }
-
-          userData.save()
         }
+        userData.save()
+        cooldowns.add(this.author.id)
+      }
+    }
+
+    async suggest () {
+      if (this.channel.id === this.client.config.channels.suggestions && !this.content.startsWith('^')) {
+        for (const emoji of this.client.config.reactions.suggestions) await this.react(emoji)
       }
     }
   }

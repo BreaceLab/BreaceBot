@@ -3,18 +3,13 @@ const Loaders = require('./loader')
 
 const Database = require('./database/Database')
 
-require('./structure/discord')
-
 module.exports = class Breace extends Client {
   constructor (options = {}) {
     super(options)
     this.token = options.token
     this.config = {
-      owners: options.owners,
-      prefixes: options.prefixes,
-      defaultColor: options.defaultColor,
-      botGuild: options.botGuild,
-      database: options.database
+      database: options.database,
+      ...require('../setup.json')
     }
 
     this.database = new Database(this)

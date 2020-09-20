@@ -12,13 +12,13 @@ module.exports = class NotifyCommand extends Command {
   }
 
   run ({ channel, member, config }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
-    if (member.roles.cache.has(config.botGuild.roles.notify)) {
-      member.roles.remove(config.botGuild.roles.notify)
+    const embed = new MessageEmbed().setColor(config.color)
+    if (member.roles.cache.has(config.roles.notify)) {
+      member.roles.remove(config.roles.notify)
       embed.setDescription('Agora você **não** será notificado quando houver notícias')
     } else {
       embed.setDescription('Agora você **sempre** será notificado quando houver notícias.')
-      member.roles.add(config.botGuild.roles.notify)
+      member.roles.add(config.roles.notify)
     }
 
     channel.send(embed)

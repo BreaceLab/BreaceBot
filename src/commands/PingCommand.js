@@ -11,7 +11,7 @@ module.exports = class PingCommand extends Command {
   }
 
   run ({ channel, config }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
+    const embed = new MessageEmbed().setColor(config.color)
     embed.setDescription(`<a:breace_animated:753454923231920242> \`${this.client.ws.ping}ms\``)
     channel.send(embed)
   }

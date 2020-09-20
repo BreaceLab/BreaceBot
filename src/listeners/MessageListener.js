@@ -8,17 +8,19 @@ module.exports = class MessageListener extends Listener {
   }
 
   async run (message) {
-    if (message.author.bot || message.channel.type !== 'text' || !message.startsWithPrefix()) return
+    if (message.author.bot || message.channel.type !== 'text') return
 
     await message.giveXp()
 
-    const prefix = message.getPrefixOfContent()
-    const args = message.arguments(prefix)
-    const cmd = args.shift().toLowerCase()
-    const command = this.commands.find(({ name, aliases }) => name === cmd || aliases.includes(cmd))
+    if (message.startsWithPrefix()) {
+      const prefix = message.getPrefixOfContent()
+      const args = message.arguments(prefix)
+      const cmd = args.shift().toLowerCase()
+      const command = this.commands.find(({ name, aliases }) => name === cmd || aliases.includes(cmd))
 
-    const context = new CommandContext(message, args, cmd, prefix)
+      const context = new CommandContext(message, args, cmd, prefix)
 
-    if (command && message.allowedChannels.includes(message.channel.id)) command.preLoad(context)
+      if (command && message.allowedChannels.includes(message.channel.id)) command.preLoad(context)
+    }
   }
 }

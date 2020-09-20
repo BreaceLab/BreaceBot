@@ -11,8 +11,8 @@ module.exports = class HelpCommand extends Command {
     })
   }
 
-  run ({ channel, guild, config }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
+  run ({ channel, guild, config, prefix }) {
+    const embed = new MessageEmbed().setColor(config.color)
     embed.setThumbnail(guild.iconURL({ dynamic: true }))
 
     const filter = this.client.commands.array().filter(c => !c.devOnly && !c.staffOnly)
@@ -21,7 +21,7 @@ module.exports = class HelpCommand extends Command {
       .map(c => c.category)
       .filter((value, index, array) => array.indexOf(value) === index)
       .map(category => {
-        embed.addField(category, filter.filter(c => c.category === category).map(c => `\`${c.name}\``).join('** - **'))
+        embed.addField(category, filter.filter(c => c.category === category).map(c => `\`${prefix}${c.name}\``).join('** - **'))
       })
 
     channel.send(embed)

@@ -17,10 +17,4 @@ module.exports = class Database {
       .then(() => console.log('[MONGO] Conectado com Sucesso.'))
       .catch(err => console.error('[MONGO] Erro ao conectar: ', err))
   }
-
-  async getDocument (id, type) {
-    const model = this.models[type]
-    const doc = (await model.findById(id)) || (await model.create({ _id: id }))
-    return doc
-  }
 }

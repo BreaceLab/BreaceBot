@@ -10,7 +10,7 @@ module.exports = class MessageListener extends Listener {
 
   run (member) {
     const embed = new MessageEmbed()
-      .setColor(this.config.defaultColor)
+      .setColor(this.config.color)
       .setTitle(`👋 Bem-vindo(a)┆${member.user.tag}`)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
       .setDescription([
@@ -22,11 +22,11 @@ module.exports = class MessageListener extends Listener {
       .setAuthor(`${member.user.username}`, `${member.user.displayAvatarURL}`)
       .setTimestamp()
 
-    if (member.guild.id === this.config.botGuild.id) {
-      const welcomeChannel = this.channels.cache.get(this.config.botGuild.welcome)
+    if (member.guild.id === this.config.botGuild) {
+      const welcomeChannel = this.channels.cache.get(this.config.welcome)
 
       if (welcomeChannel) welcomeChannel.send(embed)
-      if (!member.user.bot) member.roles.add(this.config.botGuild.roles.newUser)
+      if (!member.user.bot) member.roles.add(this.config.roles.newUser)
     }
   }
 }

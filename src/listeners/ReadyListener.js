@@ -9,6 +9,7 @@ module.exports = class ReadyListener extends Listener {
   }
 
   run () {
+    this.user.setActivity('>help', { type: 'PLAYING' })
     console.log(this.user.username, 'is ready to use.')
   }
 }

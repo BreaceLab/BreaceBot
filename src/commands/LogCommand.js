@@ -5,14 +5,15 @@ module.exports = class LogCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'log',
-      category: 'Utilitário',
-      description: 'Mostra quantos Nitro Boosters há no servidor.',
-      usage: 'log <bate-papo | avisos | sugestão> <imagem> <conteúdo>'
+      category: 'Staff',
+      staffOnly: true,
+      description: 'Faz um log no grupo.',
+      usage: 'log <avisos | sugestão> <imagem> <conteúdo>'
     })
   }
 
   run ({ channel, args: [type, image, ...content], config, prefix, context }) {
-    const embed = new MessageEmbed().setColor(config.defaultColor)
+    const embed = new MessageEmbed().setColor(config.color)
     if (!type || !image) {
       embed.setDescription([
         'Modo correto de uso:',
@@ -30,7 +31,7 @@ module.exports = class LogCommand extends Command {
         embed.setImage(image)
         embed.setDescription(content.join(' '))
 
-        this.makeLog(config.botGuild.channels.suggestion, context, embed)
+        this.makeLog(config.channels.suggestion, context, embed)
         break
 
       case 'avisos':
@@ -38,7 +39,7 @@ module.exports = class LogCommand extends Command {
         embed.setImage(image)
         embed.setDescription(content.join(' '))
 
-        this.makeLog(config.botGuild.channels.announces, context, embed)
+        this.makeLog(config.channels.announces, context, embed)
         break
     }
   }
@@ -47,6 +48,6 @@ module.exports = class LogCommand extends Command {
     embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
     const channelToSend = message.client.channels.cache.get(channelID)
     channelToSend.send(embed)
-    message.channel.send(`Anuncio feito no canal: ${channelToSend}`)
+    message.channel.send(`Anúncio feito no canal: ${channelToSend}`)
   }
 }
