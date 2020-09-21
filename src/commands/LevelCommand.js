@@ -5,7 +5,7 @@ module.exports = class LevelCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'level',
-      category: 'Social',
+      category: 'Sociais',
       aliases: ['nivel'],
       description: 'Mostra informações do seu nível atual.'
     })
