@@ -70,7 +70,7 @@ Structures.extend('Message', (DiscordMessage) => {
     }
 
     async suggest () {
-      if (this.channel.id === this.client.config.channels.suggestions && !this.content.startsWith('^')) {
+      if (this.client.config.channels.suggestions.includes(this.channel.id) && !this.content.startsWith('^')) {
         for (const emoji of this.client.config.reactions.suggestions) await this.react(emoji)
       }
     }

@@ -5,7 +5,7 @@ module.exports = class NotifyCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'notify',
-      category: 'Utilitário',
+      category: 'Utilitários',
       aliases: ['notificar'],
       description: 'Recebe ou remove o cargo de notificações.'
     })

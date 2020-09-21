@@ -20,7 +20,7 @@ module.exports = class MessageListener extends Listener {
 
       const context = new CommandContext(message, args, cmd, prefix)
 
-      if (command && message.allowedChannels.includes(message.channel.id)) command.preLoad(context)
+      if (command && (message.allowedChannels.includes(message.channel.id) || message.member.roles.cache.has(this.config.roles.staff))) command.preLoad(context)
     }
   }
 }

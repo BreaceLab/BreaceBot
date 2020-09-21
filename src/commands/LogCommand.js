@@ -5,7 +5,7 @@ module.exports = class LogCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'log',
-      category: 'Staff',
+      category: 'Staffs',
       staffOnly: true,
       description: 'Faz um log no grupo.',
       usage: 'log <avisos | sugestão> <imagem> <conteúdo>'
@@ -31,7 +31,7 @@ module.exports = class LogCommand extends Command {
         embed.setImage(image)
         embed.setDescription(content.join(' '))
 
-        this.makeLog(config.channels.suggestion, context, embed)
+        this.makeLog(config.channels.acceptedSuggestions, context, embed)
         break
 
       case 'avisos':

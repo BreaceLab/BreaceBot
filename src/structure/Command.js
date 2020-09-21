@@ -14,22 +14,24 @@ module.exports = class Command {
   }
 
   preLoad (ctx) {
-    const embed = new MessageEmbed()
+    const embed = new MessageEmbed().setColor(ctx.config.color)
 
     if (this.devOnly && !this.client.config.owners.includes(ctx.author.id)) {
       embed.setDescription('Este comando se encontra disponível apenas para meus donos.')
       return ctx.channel.send(embed)
     }
 
-    if (this.staffOnly && !ctx.member.roles.has(this.client.config.botGuild.roles.staff)) {
-      embed.setDescription('Apenas membros da equipe pode usar esse comando.')
+    if (this.staffOnly && !ctx.member.roles.cache.has(ctx.config.roles.staff)) {
+      embed.setDescription(`Apenas membros com o cargo ${this.client.guilds.cache.get(ctx.config.guild).roles.cache.get(ctx.config.roles.staff)} podem usar esse comando.`)
       return ctx.channel.send(embed)
     }
 
     try {
       this.run(ctx)
     } catch (error) {
-      console.error(error)
+      embed.setDescription(`Erro:\`\`\`${error.message || error}\`\`\``)
+
+      ctx.channel.send(embed)
     }
   }
 

@@ -9,7 +9,7 @@ module.exports = class ReadyListener extends Listener {
   }
 
   run () {
-    this.user.setActivity('>help', { type: 'PLAYING' })
+    this.user.setActivity(this.config.prefixes.map(prefix => `${prefix}help`).join(' | '), { type: 'PLAYING' })
     console.log(this.user.username, 'is ready to use.')
   }
 }

@@ -5,7 +5,7 @@ module.exports = class BoostCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'boost',
-      category: 'Utilitário',
+      category: 'Utilitários',
       aliases: ['nitroboost'],
       description: 'Mostra quantos Nitro Boosters há no servidor.'
     })
