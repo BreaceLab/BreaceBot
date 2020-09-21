@@ -18,9 +18,14 @@ module.exports = class LevelCommand extends Command {
 
     const features = Object.entries(context.levelFeatures)
 
+    const rank = await this.client.database.models.users.find().sort({ level: -1 }).sort({ xp: -1 })
+
+    const position = rank.indexOf(rank.find(({ _id }) => _id === data._id))
+
     embed.setDescription([
       `• **Usuário:** \`${target.tag}\``,
-      `• **Level/Xp:** \`${data.level} (${data.xp}/${data.level ** 5 + (100 * (data.level * 2))})\``, '',
+      `• **Level:** \`${data.level} (${data.xp}/${data.level ** 5 + (100 * (data.level * 2))} Xp)\``,
+      `• **Rank:** \`#${position + 1}\``, '',
       `• **Interaja para liberar os benefícios:**\n${features.filter(([level]) => data.level < level).map(([level, { reward }]) => `-  *\`[${level}]. ${reward}\`*`).join('\n')}`
     ])
     embed.setThumbnail(target.displayAvatarURL({ dynamic: true }))
