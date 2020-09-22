@@ -8,7 +8,7 @@ module.exports = class LogCommand extends Command {
       category: 'Staffs',
       staffOnly: true,
       description: 'Faz um log no grupo.',
-      usage: 'log <avisos | sugestão> <imagem> <conteúdo>'
+      usage: 'log <avisos> <imagem> <conteúdo>'
     })
   }
 
@@ -26,14 +26,6 @@ module.exports = class LogCommand extends Command {
     }
 
     switch (type.toLowerCase()) {
-      case 'sugestao':
-      case 'sugestão':
-        embed.setImage(image)
-        embed.setDescription(content.join(' '))
-
-        this.makeLog(config.channels.acceptedSuggestions, context, embed)
-        break
-
       case 'avisos':
       case 'aviso':
         embed.setImage(image)
@@ -48,6 +40,9 @@ module.exports = class LogCommand extends Command {
     embed.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
     const channelToSend = message.client.channels.cache.get(channelID)
     channelToSend.send(embed)
-    message.channel.send(`Anúncio feito no canal: ${channelToSend}`)
+      .then(() => {
+        message.channel.send(`Anúncio feito no canal: ${channelToSend}`)
+        message.delete()
+      })
   }
 }
