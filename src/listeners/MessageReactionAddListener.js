@@ -10,7 +10,7 @@ module.exports = class MessageReactionAddListener extends Listener {
 
   run (reaction, user) {
     if (user.id === this.user.id || !reaction || !this.config.reactions.suggestions.includes(reaction.emoji.id)) return
-    if (reaction.count >= 8) {
+    if (reaction.count >= 6) {
       if (reaction.emoji.id === this.config.reactions.suggestions[0]) {
         const embed = new MessageEmbed().setColor(this.config.color)
         const acceptedChannel = this.channels.cache.get(this.config.channels.acceptedSuggestions)

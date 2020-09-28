@@ -35,5 +35,13 @@ module.exports = class Command {
     }
   }
 
+  embed (color = this.client.config.color) {
+    const embed = new MessageEmbed()
+    embed.setColor(color)
+    embed.setFooter(`Feito por ${this.client.config.owners.map(o => this.client.users.cache.get(o).tag).join(', ')} © ${new Date().getFullYear()}`, this.client.user.displayAvatarURL({ format: 'png' }))
+
+    return embed
+  }
+
   run () {}
 }

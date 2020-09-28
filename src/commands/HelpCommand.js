@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class HelpCommand extends Command {
   constructor (client) {
@@ -11,9 +10,11 @@ module.exports = class HelpCommand extends Command {
     })
   }
 
-  run ({ channel, guild, config, prefix }) {
-    const embed = new MessageEmbed().setColor(config.color)
-    embed.setThumbnail(guild.iconURL({ dynamic: true }))
+  run ({ channel, guild, prefix }) {
+    const embed = this.embed()
+    embed
+      .setThumbnail(guild.iconURL({ dynamic: true }))
+      .setDescription('[**GitHub**](https://github.com/breacelab/breacebot)')
 
     const filter = this.client.commands.array().filter(c => !c.devOnly && !c.staffOnly)
 

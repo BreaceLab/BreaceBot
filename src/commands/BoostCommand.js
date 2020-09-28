@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class BoostCommand extends Command {
   constructor (client) {
@@ -11,11 +10,12 @@ module.exports = class BoostCommand extends Command {
     })
   }
 
-  run ({ channel, guild, config }) {
-    const embed = new MessageEmbed().setColor(config.color)
+  run ({ channel, guild }) {
+    const embed = this.embed()
+
     embed.setTitle(`<a:breace_animated:753454923231920242> BreaceLab (Nível: ${guild.premiumTier})`)
     embed.setDescription([
-      `Quantidade atual de boosters no servidor \`${guild.premiumSubscriptionCount}\` <:boost:724566423220781097>`, '',
+      `Quantidade atual de boosts no servidor \`${guild.premiumSubscriptionCount}\` <:boost:724566423220781097>`, '',
       'Recompensas que você pode ganhar assim que der boost, se você der boost achando que esta livre das regras, esta completamente enganado.', '',
       'Recompensas listadas abaixo:', '```html',
       '<-> Enviar links e imagens em qualquer canal de conversa;', '',
@@ -25,6 +25,7 @@ module.exports = class BoostCommand extends Command {
       '<-> Eventos especiais só para boosters;', '',
       `<-> XP do bot @${this.client.user.tag} em dobro;`, '```'
     ])
+
     channel.send(embed)
   }
 }

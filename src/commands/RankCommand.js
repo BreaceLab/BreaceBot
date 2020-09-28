@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class RankCommand extends Command {
   constructor (client) {
@@ -11,9 +10,9 @@ module.exports = class RankCommand extends Command {
     })
   }
 
-  async run ({ channel, guild, config }) {
+  async run ({ channel, guild }) {
     channel.startTyping()
-    const embed = new MessageEmbed().setColor(config.color)
+    const embed = this.embed()
 
     const rank = await this.getRank()
 

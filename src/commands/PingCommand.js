@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class PingCommand extends Command {
   constructor (client) {
@@ -10,8 +9,8 @@ module.exports = class PingCommand extends Command {
     })
   }
 
-  run ({ channel, config }) {
-    const embed = new MessageEmbed().setColor(config.color)
+  run ({ channel }) {
+    const embed = this.embed()
     embed.setDescription(`<a:breace_animated:753454923231920242> \`${this.client.ws.ping}ms\``)
     channel.send(embed)
   }
