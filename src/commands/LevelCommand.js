@@ -13,7 +13,7 @@ module.exports = class LevelCommand extends Command {
   async run ({ channel, author, mentions: { users }, context }) {
     const embed = this.embed()
     const target = users.size ? users.first() : author
-    const data = await this.client.database.models.users.findById(target.id)
+    const data = await context.getUser(target.id)
 
     const features = Object.entries(context.levelFeatures).filter(([level]) => data.level < level)
     const rank = await this.client.database.models.users.find().sort({ level: -1 }).sort({ xp: -1 })

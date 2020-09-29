@@ -39,8 +39,15 @@ Structures.extend('Message', (DiscordMessage) => {
       return this.content.slice(prefix.length).trim().split(/ +/g)
     }
 
+    async getUser (_id = this.author.id) {
+      let userData = await this.client.database.models.users.findById(_id)
+      if (!userData) userData = await this.client.database.models.users.create({ _id })
+
+      return userData
+    }
+
     async giveXp () {
-      const userData = await this.client.database.models.users.findById(this.author.id)
+      const userData = await this.getUser()
       const embed = new MessageEmbed().setColor(this.client.config.color)
 
       if (!cooldowns.has(this.author.id)) {
