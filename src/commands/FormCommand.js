@@ -13,6 +13,14 @@ module.exports = class FormCommand extends Command {
   async run (context) {
     const formQuestionary = new Questionary(context, { file: 'FormQuestions' })
 
+    formQuestionary.on('stopped', async () => {
+      const embed = this.embed()
+        .setColor('FF0000')
+        .setDescription('Seu formulário foi cancelado.')
+
+      await context.author.send(embed)
+    })
+
     formQuestionary.on('end', () => this.handleForm(formQuestionary))
 
     await formQuestionary.create()

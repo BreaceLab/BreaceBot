@@ -18,29 +18,34 @@ module.exports = class Questionary extends EventEmitter {
 
   async create () {
     const embed = this.embed()
-    const dmMessage = await this.safeDM()
+    const dmChannel = await this.safeDM()
 
-    if (dmMessage) {
+    if (dmChannel) {
       for (var index = 0; index < this.questions.length; index++) {
         const { question } = this.questions[index]
         embed.setDescription(`**Pergunta ${index + 1}:** \`${question}\``)
-        dmMessage.edit(embed)
+        await dmChannel.send(embed)
 
         const filter = (m) => m.author.id === this.context.author.id
         const options = { max: 1, time: 60000, errors: ['time'] }
 
-        const collector = await dmMessage.channel.awaitMessages(filter, options)
+        const collector = await dmChannel.awaitMessages(filter, options)
+
+        if (['cancel', 'cancelar'].includes(collector.first().content)) {
+          return this.emit('stopped')
+        }
+
         this.answers.push(collector.first().content)
       }
 
-      this.end(dmMessage)
+      this.end(dmChannel)
     }
   }
 
-  end (dmMessage) {
+  end (dmChannel) {
     const embed = this.embed()
     embed.setDescription('Obrigado por fazer o formulário!')
-    dmMessage.edit(embed)
+    dmChannel.send(embed)
 
     this.ended = true
     this.emit('end')
@@ -48,10 +53,11 @@ module.exports = class Questionary extends EventEmitter {
 
   async safeDM (content = `Olá \`${this.context.author.tag}\`, já vamos começar seu formulário!`) {
     const embed = this.embed()
-    return this.context.author.send(content)
+    const dmChannel = this.context.author.dmChannel || await this.context.author.createDM()
+    dmChannel.send(content)
       .then(DMMessage => {
         this.context.channel.send(embed.setDescription(`${this.context.author}, este [link](${DMMessage.url}) te levará direto para o formulário!`))
-        return DMMessage
+        return DMMessage.channel
       })
       .catch(_ => {
         const embed = this.embed()
@@ -60,6 +66,8 @@ module.exports = class Questionary extends EventEmitter {
         this.context.channel.send(embed)
         return null
       })
+
+    return dmChannel
   }
 
   embed (color = this.context.config.color) {
