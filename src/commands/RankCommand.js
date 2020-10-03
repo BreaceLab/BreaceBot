@@ -30,7 +30,7 @@ module.exports = class RankCommand extends Command {
 
   async getRank () {
     const array = []
-    const users = await this.client.database.models.users.find().sort({ level: -1 }).sort({ xp: -1 }).limit(10)
+    const users = await this.client.database.getRank('users', 10)
 
     users.map(async (dbUser, position) => {
       const user = await this.client.users.fetch(dbUser._id)

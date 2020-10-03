@@ -17,4 +17,9 @@ module.exports = class Database {
       .then(() => console.log('[MONGO] Conectado com Sucesso.'))
       .catch(err => console.error('[MONGO] Erro ao conectar: ', err))
   }
+
+  async getRank (type = 'users', limit = 0) {
+    if (limit > 5) return this.models[type].find().sort({ level: -1 }).sort({ xp: -1 }).limit(limit)
+    return this.models[type].find().sort({ level: -1 }).sort({ xp: -1 })
+  }
 }
