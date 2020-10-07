@@ -9,7 +9,7 @@ module.exports = class WelcomeReactionRoleListener extends Listener {
   }
 
   async run (reaction, user) {
-    if (!reaction || !user) return 
+    if (!reaction || !user) return
     if (reaction.message.channel.id !== this.config.channels.rolesChannel) return
     if (reaction.message.id !== this.config.messages.welcomeRoles) return
 
