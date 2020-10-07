@@ -1,5 +1,5 @@
 const { Structures, MessageEmbed } = require('discord.js')
-const { Manager, Github, safeDM } = require('../../util')
+const { Manager } = require('../../util')
 
 const cooldowns = Manager(60 * 1000)
 
@@ -11,7 +11,7 @@ Structures.extend('Message', (DiscordMessage) => {
       this.allowedChannels = this.client.config.channels.commands
 
       this.suggest()
-      this.checkGithub()
+      this.giveXp()
     }
 
     startsWithPrefix () {
@@ -58,52 +58,6 @@ Structures.extend('Message', (DiscordMessage) => {
     async suggest () {
       if (this.client.config.channels.suggestions.includes(this.channel.id) && !this.content.startsWith('^')) {
         for (const emoji of this.client.config.reactions.suggestions) await this.react(emoji)
-      }
-    }
-
-    async checkGithub () {
-      if (this.channel.id === this.client.config.channels.recommend.request && !this.author.bot) {
-        this.delete()
-        const embed = new MessageEmbed().setColor(this.client.config.color)
-        let value = this.content
-        const GITHUB_REGEX = new RegExp('(https?:\\/\\/)?github(\\.com)\\/(\\S+)')
-        if (GITHUB_REGEX.test(this.content)) value = GITHUB_REGEX.exec(this.content)[2]
-        const info = await Github.getUser(value.replace(/@/g, ''))
-
-        if (info) {
-          const repos = await Github.getRepos(info.login)
-          const orgs = await Github.getOrgs(info.login)
-          const gists = await Github.getGists(info.login)
-
-          embed.addFields([
-            {
-              name: 'Informações',
-              value: [
-                `**Repositórios Públicos:** \`${repos.length}\``,
-                `**Organizações:** \`${orgs.length}\``
-              ],
-              inline: true
-            },
-            {
-              name: '\u200b',
-              value: [
-                `**Seguidores:** \`${info.followers}\``,
-                `**Gists:** \`${gists.length}\``
-              ],
-              inline: true
-            }
-          ])
-
-          embed.setThumbnail(info.avatar_url)
-          embed.setAuthor(info.name ? `${info.name}  (${info.login})` : info.login, info.avatar_url, info.html_url)
-          if (info.bio) embed.setDescription(info.bio)
-          embed.setFooter('Membro do Github desde')
-          embed.setTimestamp(info.created_at)
-
-          const viewerChannel = this.client.channels.cache.get(this.client.config.channels.recommend.viewer)
-
-          if (viewerChannel) viewerChannel.send(embed).then(() => safeDM(this.author, 'Obrigado por mandar sua solicitação, já iremos ver e vamos responder!'))
-        }
       }
     }
   }

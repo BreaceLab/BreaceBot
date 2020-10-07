@@ -9,7 +9,8 @@ module.exports = class WelcomeReactionRoleListener extends Listener {
   }
 
   async run (reaction, user) {
-    if (reaction.channel.id !== this.config.channels.rolesChannel) return
+    if (!reaction || !user) return
+    if (reaction.message.channel.id !== this.config.channels.rolesChannel) return
     if (reaction.message.id !== this.config.messages.welcomeRoles) return
 
     const guild = await this.guilds.cache.get(this.config.guild)
