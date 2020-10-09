@@ -8,7 +8,7 @@ module.exports = class MessageListener extends Listener {
     })
   }
 
-  run (member) {
+  async run (member) {
     const embed = new MessageEmbed()
       .setColor(this.config.color)
       .setDescription([
@@ -19,7 +19,7 @@ module.exports = class MessageListener extends Listener {
 
     if (member.guild.id === this.config.guild) {
       const leaveChannel = this.channels.cache.get(this.config.channels.leave)
-      this.database.models.users.findByIdAndRemove(member.user.id)
+      await this.database.models.users.findByIdAndRemove(member.user.id)
       if (leaveChannel) leaveChannel.send(embed)
     }
   }
