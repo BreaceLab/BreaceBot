@@ -23,7 +23,7 @@ module.exports = class WelcomeReactionRoleListener extends Listener {
 
     const otherRole = await guild.roles.cache
       .find(r => {
-        return r.id === this.config.reactions.reactionRole.other[reaction.emoji.name]
+        return r.id === this.config.reactions.reactionRole.others[reaction.emoji.name]
       })
 
     if (otherRole) await guildMember.roles.remove(otherRole, 'Reaction Role')
