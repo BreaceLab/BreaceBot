@@ -16,13 +16,17 @@ module.exports = class WelcomeReactionRoleListener extends Listener {
     const guild = await this.guilds.cache.get(this.config.guild)
     const guildMember = await guild.member(user.id)
 
-    const role = await guild.roles.cache
+    const langRole = await guild.roles.cache
       .find(r => {
-        return r.id === this.config.reactions.reactionRole[reaction.emoji.name]
+        return r.id === this.config.reactions.reactionRole.languages[reaction.emoji.name]
       })
 
-    if (!role) return
+    const otherRole = await guild.roles.cache
+      .find(r => {
+        return r.id === this.config.reactions.reactionRole.other[reaction.emoji.name]
+      })
 
-    await guildMember.roles.remove(role, 'Reaction Role')
+    if (otherRole) await guildMember.roles.remove(otherRole, 'Reaction Role')
+    if (langRole) await guildMember.roles.remove([langRole, '736257239483940945'], 'Reaction Role')
   }
 }
