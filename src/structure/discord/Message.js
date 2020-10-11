@@ -11,7 +11,7 @@ Structures.extend('Message', (DiscordMessage) => {
       this.allowedChannels = this.client.config.channels.commands
 
       this.suggest()
-      this.giveXp()
+      if (!this.author.bot) this.giveXp()
     }
 
     startsWithPrefix () {
