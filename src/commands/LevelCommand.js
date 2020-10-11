@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class LevelCommand extends Command {
   constructor (client) {
@@ -11,19 +10,21 @@ module.exports = class LevelCommand extends Command {
     })
   }
 
-  async run ({ channel, author, mentions: { users }, config, context }) {
-    const embed = new MessageEmbed().setColor(config.color)
+  async run ({ channel, author, mentions: { users }, context }) {
+    const embed = this.embed()
     const target = users.size ? users.first() : author
-    const data = await this.client.database.models.users.findById(target.id)
+    const data = await context.getUser(target.id)
 
-    const features = Object.entries(context.levelFeatures)
+    const rank = await this.client.database.getRank()
+    const position = rank.indexOf(rank.find(({ _id }) => _id === data._id))
 
-    embed.setDescription([
+    const description = [
       `• **Usuário:** \`${target.tag}\``,
       `• **Level:** \`${data.level} (${data.xp}/${data.level ** 5 + (100 * (data.level * 2))} Xp)\``,
-      '',
-      `• **Interaja para liberar os benefícios:**\n${features.filter(([level]) => data.level < level).map(([level, { reward }]) => `-  *\`[${level}]. ${reward}\`*`).join('\n')}`
-    ])
+      `• **Rank:** \`#${position + 1}\``
+    ]
+
+    embed.setDescription(description)
     embed.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 
     channel.send(embed)

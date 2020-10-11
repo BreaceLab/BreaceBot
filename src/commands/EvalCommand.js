@@ -18,10 +18,10 @@ module.exports = class EvalCommand extends Command {
     }
     try {
       let evaled = await eval(string)
-      if (typeof evaled !== 'string') { evaled = require('util').inspect(evaled) }
-      ctx.channel.send(this.clean(evaled), { code: 'xl' })
+      if (typeof evaled !== 'string') { evaled = require('util').inspect(evaled, { depth: 0, showHidden: false }) }
+      ctx.channel.send(this.clean(evaled), { code: 'js' })
     } catch (err) {
-      ctx.channel.send(`\`ERROR\` \`\`\`xl\n${this.clean(err)}\n\`\`\``)
+      ctx.channel.send(`\`ERROR\` \`\`\`js\n${this.clean(err)}\n\`\`\``)
     }
   }
 

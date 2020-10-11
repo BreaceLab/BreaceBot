@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class LogCommand extends Command {
   constructor (client) {
@@ -13,7 +12,7 @@ module.exports = class LogCommand extends Command {
   }
 
   run ({ channel, args: [type, image, ...content], config, prefix, context }) {
-    const embed = new MessageEmbed().setColor(config.color)
+    const embed = this.embed()
     if (!type || !image) {
       embed.setDescription([
         'Modo correto de uso:',

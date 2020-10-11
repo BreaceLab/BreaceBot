@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class HelpCommand extends Command {
   constructor (client) {
@@ -11,9 +10,11 @@ module.exports = class HelpCommand extends Command {
     })
   }
 
-  run ({ channel, guild, config, prefix }) {
-    const embed = new MessageEmbed().setColor(config.color)
-    embed.setThumbnail(guild.iconURL({ dynamic: true }))
+  run ({ channel, guild, config }) {
+    const embed = this.embed()
+    embed
+      .setThumbnail(guild.iconURL({ dynamic: true }))
+      .setDescription(`[**GitHub**](https://github.com/breacelab/breacebot) | Prefixos disponíveis: ${config.prefixes.map(prefix => `\`${prefix}\``).join('**, **')}`)
 
     const filter = this.client.commands.array().filter(c => !c.devOnly && !c.staffOnly)
 
@@ -21,7 +22,7 @@ module.exports = class HelpCommand extends Command {
       .map(c => c.category)
       .filter((value, index, array) => array.indexOf(value) === index)
       .map(category => {
-        embed.addField(category, filter.filter(c => c.category === category).map(c => `\`${prefix}${c.name}\``).join('** - **'))
+        embed.addField(category, filter.filter(c => c.category === category).map(c => `\`${c.name}\``).join('** - **'))
       })
 
     channel.send(embed)

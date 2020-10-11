@@ -10,8 +10,6 @@ module.exports = class MessageListener extends Listener {
   async run (message) {
     if (message.author.bot || message.channel.type !== 'text') return
 
-    await message.giveXp()
-
     if (message.startsWithPrefix()) {
       const prefix = message.getPrefixOfContent()
       const args = message.arguments(prefix)

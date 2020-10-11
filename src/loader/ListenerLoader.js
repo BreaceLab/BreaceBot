@@ -31,7 +31,7 @@ module.exports = class ListenerLoader extends Loader {
 
       const listener = new Listener()
       listener.listen(this.client)
-      console.info(`|  [${listener.name}] loaded.`)
+      console.info(`|  [${listener.generic ? listener.constructor.name : listener.name}] loaded.`)
       this.success++
     })
   }

@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class NotifyCommand extends Command {
   constructor (client) {
@@ -12,7 +11,7 @@ module.exports = class NotifyCommand extends Command {
   }
 
   run ({ channel, member, config }) {
-    const embed = new MessageEmbed().setColor(config.color)
+    const embed = this.embed()
     if (member.roles.cache.has(config.roles.notify)) {
       member.roles.remove(config.roles.notify)
       embed.setDescription('Agora você **não** será notificado quando houver notícias')

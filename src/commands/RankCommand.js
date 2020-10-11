@@ -1,5 +1,4 @@
 const { Command } = require('../structure')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class RankCommand extends Command {
   constructor (client) {
@@ -11,9 +10,9 @@ module.exports = class RankCommand extends Command {
     })
   }
 
-  async run ({ channel, guild, config }) {
+  async run ({ channel, guild }) {
     channel.startTyping()
-    const embed = new MessageEmbed().setColor(config.color)
+    const embed = this.embed()
 
     const rank = await this.getRank()
 
@@ -31,7 +30,7 @@ module.exports = class RankCommand extends Command {
 
   async getRank () {
     const array = []
-    const users = await this.client.database.models.users.find().sort({ level: -1 }).sort({ xp: -1 }).limit(10)
+    const users = await this.client.database.getRank('users', 10)
 
     users.map(async (dbUser, position) => {
       const user = await this.client.users.fetch(dbUser._id)

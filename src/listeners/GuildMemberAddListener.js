@@ -14,7 +14,7 @@ module.exports = class MessageListener extends Listener {
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
       .setDescription([
         '🧪┆BreaceLab', '',
-        'Seja bem vindo a BreaceLab, aqui é uma comunidade de desenvolvedores de jogos, onde você pode aprender programação e muito mais.', '',
+        'Seja bem vindo a BreaceLab, aqui é uma comunidade de desenvolvedores Brasileiros :flag_br:, onde você pode aprender programação e muito mais.', '',
         '📦┆Pegue cargos no canal <#732058839104487464>', '', '🚫┆leia as <#723538550188146791> e evite ser punido.', '',
         '❓┆para saber mais sobre o servidor vá em <#723728707356721157>'
       ])

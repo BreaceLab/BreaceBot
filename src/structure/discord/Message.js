@@ -10,18 +10,8 @@ Structures.extend('Message', (DiscordMessage) => {
 
       this.allowedChannels = this.client.config.channels.commands
 
-      this.levelFeatures = {
-        7: {
-          reward: 'Aparecer na lista de ativos',
-          make: (rewards) => this.member.roles.add(rewards.active)
-        },
-        4: {
-          reward: 'Enviar links',
-          make: (rewards) => this.member.roles.add(rewards.links)
-        }
-      }
-
       this.suggest()
+      this.giveXp()
     }
 
     startsWithPrefix () {
@@ -39,8 +29,15 @@ Structures.extend('Message', (DiscordMessage) => {
       return this.content.slice(prefix.length).trim().split(/ +/g)
     }
 
+    async getUser (_id = this.author.id) {
+      let userData = await this.client.database.models.users.findById(_id)
+      if (!userData) userData = await this.client.database.models.users.create({ _id })
+
+      return userData
+    }
+
     async giveXp () {
-      const userData = await this.client.database.models.users.findById(this.author.id)
+      const userData = await this.getUser()
       const embed = new MessageEmbed().setColor(this.client.config.color)
 
       if (!cooldowns.has(this.author.id)) {
@@ -50,19 +47,8 @@ Structures.extend('Message', (DiscordMessage) => {
           userData.level++
           userData.xp = 0
 
-          if (this.levelFeatures[userData.level]) {
-            embed.setDescription([
-              `Parabéns ${this.author}, você alcançou o nível **${userData.level}**!`,
-              `Benefícios desbloqueados: \`${this.levelFeatures[userData.level].reward}\``
-            ])
-
-            this.levelFeatures[userData.level].make(this.client.config.rewards)
-            this.channel.send(embed)
-          } else {
-            embed.setDescription(`Parabéns ${this.author}, você alcançou o nível **${userData.level}**!`)
-
-            this.channel.send(embed)
-          }
+          embed.setDescription(`Parabéns ${this.author}, você alcançou o nível **${userData.level}**!`)
+          this.channel.send(embed)
         }
         userData.save()
         cooldowns.add(this.author.id)

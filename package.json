@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "discord.js": "^12.2.0",
     "mongoose": "^5.10.6"
   },
