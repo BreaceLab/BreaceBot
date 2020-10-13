@@ -25,6 +25,12 @@ module.exports = class EvalCommand extends Command {
     }
   }
 
+  /* async run (ctx) {
+    ctx.guild.channels.cache.get('732058839104487464').messages.fetch('765347337023258634').then(msg => {
+      ['🎨', '👾', '🐼', '🎙️'].map(reaction => msg.react(reaction))
+    })
+  } */
+
   clean (text) {
     return typeof (text) === 'string' ? text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) : text
   }

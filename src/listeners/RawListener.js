@@ -22,6 +22,9 @@ module.exports = class RawListener extends Listener {
         if (packet.t === 'MESSAGE_REACTION_ADD') {
           this.emit('messageReactionAdd', reaction, user)
         }
+        if (packet.t === 'MESSAGE_REACTION_REMOVE') {
+          this.emit('messageReactionRemove', reaction, user)
+        }
       })
     }
   }
