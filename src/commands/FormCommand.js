@@ -23,6 +23,7 @@ module.exports = class FormCommand extends Command {
 
     formQuestionary.on('end', () => this.handleForm(formQuestionary))
 
+    await context.channel.send(`\`${context.author.tag}\` iniciou um formulário...`)
     await formQuestionary.create()
   }
 
