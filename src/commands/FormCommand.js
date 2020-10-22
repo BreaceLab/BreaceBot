@@ -12,6 +12,8 @@ module.exports = class FormCommand extends Command {
 
   async run (context) {
     const formQuestionary = new Questionary(context, { file: 'FormQuestions' })
+    const botGuild = this.client.guilds.cache.get(context.config.guild)
+    const formsChannel = botGuild.channels.cache.get(context.config.channels.forms)
 
     formQuestionary.on('stopped', async () => {
       const embed = this.embed()
@@ -23,7 +25,7 @@ module.exports = class FormCommand extends Command {
 
     formQuestionary.on('end', () => this.handleForm(formQuestionary))
 
-    await context.channel.send(`\`${context.author.tag}\` iniciou um formulário...`)
+    if (formsChannel) await formsChannel.send(`\`${context.author.tag}\` iniciou um formulário...`)
     await formQuestionary.create()
   }
 
