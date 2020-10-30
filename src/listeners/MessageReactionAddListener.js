@@ -24,7 +24,7 @@ module.exports = class MessageReactionAddListener extends Listener {
         embed.setAuthor(reaction.message.author.tag, reaction.message.author.displayAvatarURL({ dynamic: true }))
         embed.setDescription([
         `**Sugestão aceita:** \`${Util.escapeMarkdown(reaction.message.content)}\``, '',
-        reaction.message.reactions.cache.filter(r => this.config.reactions.suggestions.includes(r._emoji.id)).map(r => `${r._emoji} \`${r.count}\``).join(' | ')
+        reaction.message.reactions.cache.filter(r => this.config.reactions.suggestions.includes(r._emoji.id)).map(r => `${r._emoji} \`${r.count - 1}\``).join(' | ')
         ])
 
         if (acceptedChannel) acceptedChannel.send(embed).then(() => reaction.message.delete())
