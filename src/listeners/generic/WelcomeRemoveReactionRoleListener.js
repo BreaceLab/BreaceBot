@@ -11,14 +11,23 @@ module.exports = class WelcomeReactionRoleListener extends Listener {
   async run (reaction, user) {
     if (!reaction || !user) return
     if (reaction.message.channel.id !== this.config.channels.rolesChannel) return
-    if (reaction.message.id === this.config.messages.welcomeRoles || reaction.message.id === this.config.messages.otherMessages) {
-      const guild = await this.guilds.cache.get(this.config.guild)
-      const guildMember = await guild.member(user.id)
+    const guild = await this.guilds.cache.get(this.config.guild)
+    const guildMember = await guild.member(user.id)
+    const reactionRole = this.config.reactions.reactionRole
+    const get = guild.roles.cache.get
+    const name = reaction.emoji.name
+    let role = reactionRole.dev[name]
+    const isDev = !!role
+    if (!role) {
+      role = reactionRole.others[name]
+    }
 
-      const role = await guild.roles.cache
-        .find(r => r.id === this.config.recations.reactionRole[reaction.emoji.name])
-
-      if (role) await guildMember.roles.remove(role, 'Reaction Role')
+    if (role) await guildMember.roles.remove(role, 'Reaction Role')
+    if (isDev) {
+      const dev = Object.values(this.config.roles.dev).some(guildMember.roles.cache.has)
+      if (!dev) {
+        await guildMember.remove(await get(dev), 'Reaction Dev Role')
+      }
     }
   }
 }
